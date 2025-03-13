@@ -1,6 +1,7 @@
 import random
 import timeit
 import matplotlib.pyplot as plt
+from tqdm import tqdm
 
 
 def randomized_quick_sort(arr):
@@ -44,7 +45,7 @@ times_randomized = {}
 times_deterministic = {}
 repeat = 5
 
-for size, array in arrays.items():
+for size, array in tqdm(arrays.items(), desc="Вимірювання часу виконання"):
     time_randomized_quick_sort =  sum(timeit.repeat(lambda: randomized_quick_sort(array.copy()), repeat=repeat, number=1))/repeat
     time_deterministic_quick_sort =  sum(timeit.repeat(lambda: deterministic_quick_sort(array.copy()), repeat=repeat, number=1))/repeat
     times_randomized[size] = time_randomized_quick_sort
