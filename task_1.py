@@ -1,4 +1,7 @@
 import random
+import timeit
+import matplotlib.pyplot as plt
+
 
 def randomized_quick_sort(arr):
     """Рандомізоване швидке сортування"""
@@ -37,28 +40,38 @@ def generate_random_array(size, min_val=-10**6, max_val=10**6):
 sizes = [10_000, 50_000, 100_000, 500_000]
 arrays = {size: generate_random_array(size) for size in sizes}
 
+times_randomized = {}
+times_deterministic = {}
+repeat = 5
 
-randomized_quick_sort_arr = randomized_quick_sort(arrays[10_000])
-print("Відсортований масив рандомізований:", randomized_quick_sort_arr)
+for size, array in arrays.items():
+    time_randomized_quick_sort =  sum(timeit.repeat(lambda: randomized_quick_sort(array.copy()), repeat=repeat, number=1))/repeat
+    time_deterministic_quick_sort =  sum(timeit.repeat(lambda: deterministic_quick_sort(array.copy()), repeat=repeat, number=1))/repeat
+    times_randomized[size] = time_randomized_quick_sort
+    times_deterministic[size] = time_deterministic_quick_sort
+    print(f"finish {size}")
 
-randomized_quick_sort_arr2 = randomized_quick_sort(arrays[50_000])
-print("Відсортований масив рандомізований:", randomized_quick_sort_arr2)
+print("finish")
 
-randomized_quick_sort_arr2 = randomized_quick_sort(arrays[100_000])
-print("Відсортований масив рандомізований:", randomized_quick_sort_arr2)
+# Вивід результатів у термінал
+print("\n=== Результати виконання сортувань ===\n")
+for size in sizes:
+    print(f"Розмір масиву: {size}")
+    print(f"   Рандомізований QuickSort: {times_randomized[size]:.4f} секунд")
+    print(f"   Детермінований QuickSort: {times_deterministic[size]:.4f} секунд")
+    print()  
 
-randomized_quick_sort_arr2 = randomized_quick_sort(arrays[500_000])
-print("Відсортований масив рандомізований:", randomized_quick_sort_arr2)
 
+# Побудова графіка
+plt.figure(figsize=(10, 6))
 
-deterministic_quick_sort_arr = deterministic_quick_sort(arrays[10_000])
-print("Відсортований масив детермінований:", deterministic_quick_sort_arr)
+plt.plot(sizes, [times_randomized[size] for size in sizes], marker="o", linestyle="-", label="Рандомізований QuickSort")
+plt.plot(sizes, [times_deterministic[size] for size in sizes], marker="x", linestyle="-", label="Детермінований QuickSort")
 
-deterministic_quick_sort_arr2 = randomized_quick_sort(arrays[50_000])
-print("Відсортований масив детермінований:", deterministic_quick_sort_arr2)
+plt.xlabel("Розмір масиву")
+plt.ylabel("Середній час виконання (секунди)")
+plt.title("Порівняння рандомізованого та детермінованого QuickSort")
+plt.legend()
+plt.grid()
 
-deterministic_quick_sort_arr2 = randomized_quick_sort(arrays[100_000])
-print("Відсортований масив детермінований:", deterministic_quick_sort_arr2)
-
-deterministic_quick_sort_arr2 = randomized_quick_sort(arrays[500_000])
-print("Відсортований масив детермінований:", deterministic_quick_sort_arr2)
+plt.show()
