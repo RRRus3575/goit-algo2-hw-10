@@ -49,9 +49,7 @@ for size, array in arrays.items():
     time_deterministic_quick_sort =  sum(timeit.repeat(lambda: deterministic_quick_sort(array.copy()), repeat=repeat, number=1))/repeat
     times_randomized[size] = time_randomized_quick_sort
     times_deterministic[size] = time_deterministic_quick_sort
-    print(f"finish {size}")
-
-print("finish")
+    
 
 # Вивід результатів у термінал
 print("\n=== Результати виконання сортувань ===\n")
